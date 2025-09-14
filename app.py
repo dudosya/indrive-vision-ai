@@ -9,9 +9,7 @@ import cv2
 import numpy as np
 import time
 
-# =====================================================================================
-# Configuration
-# =====================================================================================
+
 st.set_page_config(page_title="InVision AI by Dosbol E.", layout="wide", initial_sidebar_state="expanded")
 
 # --- Model Paths ---
@@ -29,9 +27,7 @@ NORMALIZE_STD = [0.229, 0.224, 0.225]
 DAMAGE_CONF_THRESH = 0.40
 SAFETY_CONF_THRESH = 0.50
 
-# =====================================================================================
-# Model Loading
-# =====================================================================================
+
 @st.cache_resource
 def load_models():
     damage_model = YOLO(DAMAGE_MODEL_PATH)
@@ -43,10 +39,7 @@ def load_models():
 
 damage_model, cleanliness_model, safety_model = load_models()
 
-# =====================================================================================
-# Prediction & Scoring Functions
-# =====================================================================================
-# (These functions remain exactly the same)
+
 def predict_cleanliness(image: Image.Image):
     image = image.convert("RGB")
     transform = transforms.Compose([
@@ -92,9 +85,7 @@ def calculate_condition_score(cleanliness_results, damage_results, safety_result
     score = max(0, score)
     return score, reasons, is_safe
 
-# =====================================================================================
-# Streamlit User Interface (FINAL, DEPRECATION-FREE VERSION)
-# =====================================================================================
+
 
 # --- Sidebar ---
 st.sidebar.title("About InVision AI")
@@ -124,11 +115,11 @@ if uploaded_file is not None:
     image = Image.open(uploaded_file)
     col_img, col_report = st.columns([2, 3])
     with col_img:
-        st.image(image, caption="Uploaded Vehicle", width='stretch') # CORRECTED PARAMETER
+        st.image(image, caption="Uploaded Vehicle", width='stretch') 
 
     with col_report:
         st.write("")
-        if st.button("Generate Vehicle Condition Report", width='stretch'): # CORRECTED PARAMETER
+        if st.button("Generate Vehicle Condition Report", width='stretch'): 
             with st.spinner("🔬 Performing multi-model analysis..."):
                 start_time = time.time()
                 cleanliness_results = predict_cleanliness(image)
@@ -159,7 +150,7 @@ if uploaded_file is not None:
                         for box in safety_boxes:
                             issue = safety_model.names[int(box.cls[0])].replace('_', ' ').title()
                             st.write(f"- **{issue}** detected with **{box.conf[0]:.1%}** confidence.")
-                        st.image(safety_annotated_img, width='stretch') # CORRECTED PARAMETER
+                        st.image(safety_annotated_img, width='stretch') 
                     else:
                         st.write("No critical safety issues were found.")
                 with tab3:
@@ -170,7 +161,7 @@ if uploaded_file is not None:
                         for i, box in enumerate(damage_boxes):
                             damage_type = damage_model.names[int(box.cls[0])].title()
                             st.write(f"  - **{damage_type}** (Confidence: {box.conf[0]:.1%})")
-                        st.image(damage_annotated_img, width='stretch') # CORRECTED PARAMETER
+                        st.image(damage_annotated_img, width='stretch')
 
 if 'elapsed_time' in st.session_state:
     placeholder.metric(label="Total Analysis Time", value=f"{st.session_state.elapsed_time:.2f} s")
