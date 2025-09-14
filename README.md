@@ -1,84 +1,78 @@
-# 🚗 InVision AI: Automated Vehicle Quality & Safety Platform
 
-**Submission for the InDrive Hackathon by Team MRZL (Dosbol Erlan)**
+# InVision AI: Automated Vehicle Condition Analysis
 
-This project is a comprehensive computer vision platform designed to automate vehicle condition analysis from a single photograph, built to address the core challenges of quality control and safety in the ride-hailing industry.
-
----
-
-### 🚀 Live Demo & Demo Videos
-
-*   **Experience the live application:** [**https://dudosya-indrive-vision.streamlit.app/**](https://dudosya-indrive-vision.streamlit.app/)
-
-Our platform's capabilities are demonstrated in the following three short videos, each highlighting a key real-world use case for InDrive.
-
-| Use Case | Demo Video (Click to Play) | Key Feature Demonstrated |
-| :--- | :---: | :--- |
-| ✅ **The "Good" Case** <br> (Automated Onboarding Pass) | [![Clean Car Demo](assets/thumb_clean.jpeg)](clean.mp4) | The system correctly identifies a clean, safe vehicle, assigning a high Condition Score suitable for an automatic pass. |
-| ⚠️ **The "Average" Case** <br> (Customer Complaint / Needs Review) | [![Dirty Car Demo](assets/thumb_dirty.jpeg)](dirty.mp4) | The system detects cosmetic issues (dirt & damage), validates a potential customer complaint, and generates a lower score flagging the vehicle for review. |
-| ❌ **The "Unsafe" Case** <br> (Proactive Safety Fail) | [![Safety Demo](assets/thumb_safety.jpeg)](cracked_windshield.mp4) | The system identifies a critical safety hazard, triggers a prominent alert, and assigns a failing score, demonstrating its role in risk mitigation. |
+A computer vision platform for automated vehicle condition analysis from a single photograph, submitted for the Decentrathon by Dosbol Erlan.
 
 ---
 
-## 1. Business Value Proposition for InDrive
+### Demo
 
-InVision AI directly addresses key operational bottlenecks by transforming a slow, subjective manual review process into a fast, objective, and scalable automated system.
+*   **Live Application:** [**https://dudosya-indrive-vision.streamlit.app/**](https://dudosya-indrive-vision.streamlit.app/)
 
-### Key Applications:
-*   **Driver Onboarding Automation:** Instantly provides a pass/fail/review verdict on new vehicle submissions, reducing manual labor and accelerating driver activation.
-*   **Customer Complaint Triage:** Objectively validates rider-submitted photos of vehicle condition (e.g., "car was dirty"), enabling faster, fairer support resolutions.
-*   **Proactive Fleet Safety Audits:** Perform automated, periodic spot-checks to identify and flag safety issues like cracked windshields before they become a liability.
+The platform's analysis is demonstrated in the videos below.
+
+| Use Case | Demonstration (Click to Play) |
+| :--- | :---: |
+| ✅ **Clean Vehicle (Pass)** | [![Clean Car Demo](https://img.youtube.com/vi/bdF5OKvWusc/0.jpg)](https://www.youtube.com/watch?v=bdF5OKvWusc) |
+| ⚠️ **Dirty Vehicle (Review)** | [![Dirty Car Demo](https://img.youtube.com/vi/bdF5OKvWusc/0.jpg)](https://www.youtube.com/watch?v=bdF5OKvWusc) |
+| ❌ **Unsafe Vehicle (Fail)** | [![Safety Demo](https://img.youtube.com/vi/AExnKothz4k/0.jpg)](https://www.youtube.com/watch?v=AExnKothz4k) |
 
 ---
 
-## 2. Technical Architecture & Features
+## 1. Business Application
 
-The platform uses a parallel pipeline of three specialized, custom-trained AI models to perform a comprehensive analysis.
+The platform automates the manual review process for vehicle condition.
+
+*   **Driver Onboarding:** Provides a pass/fail/review verdict on new vehicle submissions to accelerate driver activation.
+*   **Complaint Validation:** Objectively validates rider-submitted photos of vehicle condition (e.g., dirt, damage).
+*   **Fleet Safety Audits:** Enables automated, periodic checks for safety issues like cracked windshields or tire damage.
+
+---
+
+## 2. Technical Overview
+
+The system uses a pipeline of three custom-trained models for analysis.
 
 ![Architecture Diagram](assets/architecture.png)
 
-### Core Features:
-*   **Multi-Model Analysis:** Utilizes three distinct models for a granular report:
-    1.  **🛡️ Safety Model (YOLOv8n):** Detects critical hazards like `cracked_windshields`, `headlight_oxidation`, and `tire_damage`.
-    2.  **🔧 Damage Model (YOLOv8n):** Identifies cosmetic issues like `scratches`, `dents`, and `rust`.
-    3.  **🧼 Cleanliness Model (EfficientNet-B0):** Classifies the vehicle's overall `clean` or `dirty` state.
-*   **Vehicle Condition Score:** Aggregates all model outputs into a single, intuitive score from 0-100 for at-a-glance assessment.
-*   **Severity Assessment:** Automatically classifies the severity of cosmetic damages (Minor, Moderate, Severe) based on their relative size.
-*   **Fast & Interactive UI:** Built with Streamlit, the platform provides a responsive and user-friendly interface with detailed, tab-based reporting.
+### Core Components:
+*   **Multi-Model Analysis:**
+    1.  **Safety Model (YOLOv8n):** Detects `cracked_windshields`, `headlight_oxidation`, `tire_damage`.
+    2.  **Damage Model (YOLOv8n):** Identifies `scratches`, `dents`, `rust`.
+    3.  **Cleanliness Model (EfficientNet-B0):** Classifies the vehicle as `clean` or `dirty`.
+*   **Condition Score:** Aggregates model outputs into a single 0-100 score.
+*   **Severity Assessment:** Classifies cosmetic damage severity (Minor, Moderate, Severe) based on the detection's relative size.
+*   **User Interface:** A Streamlit application for report visualization.
 
 ---
 
-## 3. A Data-Centric Journey: A Case Study in Curing AI Bias
+## 3. Bias Correction Case Study
 
-Our most significant technical achievement was not just training models, but diagnosing and fixing critical dataset biases—a crucial step for building real-world AI.
+A primary technical challenge was diagnosing and fixing dataset bias.
 
-Our baseline damage model (`Run 1`) achieved a high mAP (0.42) but suffered from **"framing bias,"** producing false positives on clean close-ups. It had learned the false correlation: `"close-up photo" = "damage"`.
+The initial damage model (`Run 1`) exhibited **"framing bias,"** producing false positives on clean close-ups. It incorrectly correlated close-up photos with the presence of damage.
 
-We solved this by programmatically generating **1,924 negative examples** (clean close-ups) and re-training the model (`Run 2`). The comparison below shows that while `Run 2`'s mAP score is lower on the original *biased validation set*, its real-world performance is vastly superior because it no longer makes these simple mistakes. **Our final application uses this robust, de-biased model.**
+This was addressed by augmenting the dataset with **1,924 negative examples** (clean close-ups) and re-training the model (`Run 2`). While `Run 2`'s mAP is lower on the original *biased validation set*, its real-world performance is superior due to the elimination of this specific bias. The final application uses the de-biased model.
 
 ![Comparison Plot of Biased vs. De-biased Models](assets/bias_comparison.png)
 
-This iterative **Train -> Diagnose -> Fix Data -> Re-train** cycle was central to our methodology and demonstrates a mature approach to applied machine learning.
+This **Train -> Diagnose -> Augment -> Re-train** cycle was a core part of the development process.
 
 ---
 
-## Future Work Highlight: Curing Bias with Synthetic Data
+## 4. Future Work Highlight: Curing Bias with Synthetic Data
 
-Our analysis proved that dataset bias is the greatest challenge to building a production-ready model. The most promising solution is to create **perfectly paired synthetic datasets** using image-to-image AI models. We conducted a successful proof-of-concept demonstrating this advanced technique:
+A proposed method to further mitigate dataset bias is the use of paired synthetic data generated by image-to-image models. This allows for the creation of large, perfectly balanced datasets. A proof-of-concept is demonstrated below.
 
 | Domain | Before (Original Image) | After (AI-Generated Version) |
 | :---: | :---: | :---: |
-| **Cleanliness** | ![Dirty Car](assets/dirty1.jpeg) | ![Clean Car](assets/dirty2.png) |
-| **Cosmetic Damage** | ![Scratched Car](assets/scratches1.jpeg) | ![Repaired Car](assets/scratches2.png) |
-| **Safety** | ![Cracked Windshield](assets/cracked_windshield1.jpeg) | ![Repaired Windshield](assets/cracked_windshield2.png) |
-
-This method allows for the creation of massive, perfectly balanced datasets, representing a clear path to a hyper-realistic and unbiased AI model.
+| **Cleanliness** | <img src="assets/dirty1.jpeg" alt="Dirty Car" width="300"> | <img src="assets/dirty2.png" alt="Clean Car" width="300"> |
+| **Cosmetic Damage** | <img src="assets/scratches1.jpeg" alt="Scratched Car" width="300"> | <img src="assets/scratches2.png" alt="Repaired Car" width="300"> |
+| **Safety** | <img src="assets/cracked_windshield1.jpeg" alt="Cracked Windshield" width="300"> | <img src="assets/cracked_windshield2.png" alt="Repaired Windshield" width="300"> |
 
 ---
 
----
-
-## 4. How to Run Locally
+## 5. How to Run Locally
 
 1.  **Clone the repository:**
     ```bash
@@ -92,7 +86,6 @@ This method allows for the creation of massive, perfectly balanced datasets, rep
     # On Windows: venv\Scripts\activate
     ```
 3.  **Install dependencies:**
-    The application requires system-level libraries for OpenCV, which are handled by `packages.txt` in the Streamlit Cloud deployment. For local use, ensure you have a working OpenCV installation.
     ```bash
     pip install -r requirements.txt
     ```
@@ -103,11 +96,11 @@ This method allows for the creation of massive, perfectly balanced datasets, rep
 
 ---
 
-## 5. Tech Stack
+## 6. Tech Stack
 
 *   **Application:** Streamlit
 *   **ML/DL Frameworks:** PyTorch, Ultralytics (YOLOv8), `timm`
-*   **Data & Image Processing:** Pandas, Pillow, OpenCV
-*   **Data Management & Labeling:** Roboflow
-*   **Training Environment:** Google Colab (T4 GPU)
+*   **Image Processing:** Pillow, OpenCV
+*   **Data Management:** Roboflow
+*   **Training:** Google Colab (T4 GPU)
 *   **Deployment:** Streamlit Community Cloud
