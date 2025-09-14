@@ -8,6 +8,7 @@ A computer vision platform for automated vehicle condition analysis from a singl
 ### Demo
 
 *   **Live Application:** [**https://dudosya-indrive-vision.streamlit.app/**](https://dudosya-indrive-vision.streamlit.app/)
+*   **Technical Report:** [**View the Detailed Report (PDF)**](https://drive.google.com/file/d/1-nu_QlWdeybrdX_5OQt7Z0AcgT-Bp4k_/view?usp=sharing)
 
 The platform's analysis is demonstrated in the videos below.
 
