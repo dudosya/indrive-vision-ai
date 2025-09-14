@@ -13,7 +13,7 @@ The platform's analysis is demonstrated in the videos below.
 
 | Use Case | Demonstration (Click to Play) |
 | :--- | :---: |
-| ✅ **Clean Vehicle (Pass)** | [![Clean Car Demo](https://img.youtube.com/vi/bdF5OKvWusc/0.jpg)](https://www.youtube.com/watch?v=bdF5OKvWusc) |
+| ✅ **Clean Vehicle (Pass)** | [![Clean Car Demo](https://img.youtube.com/vi/Vxf3VJt9wtk/0.jpg)](https://www.youtube.com/watch?v=Vxf3VJt9wtk) |
 | ⚠️ **Dirty Vehicle (Review)** | [![Dirty Car Demo](https://img.youtube.com/vi/bdF5OKvWusc/0.jpg)](https://www.youtube.com/watch?v=bdF5OKvWusc) |
 | ❌ **Unsafe Vehicle (Fail)** | [![Safety Demo](https://img.youtube.com/vi/AExnKothz4k/0.jpg)](https://www.youtube.com/watch?v=AExnKothz4k) |
 
@@ -29,11 +29,25 @@ The platform automates the manual review process for vehicle condition.
 
 ---
 
+
 ## 2. Technical Overview
 
 The system uses a pipeline of three custom-trained models for analysis.
 
-![Architecture Diagram](assets/architecture.png)
+<p align="center">
+  <img src="assets/architecture.png" alt="Architecture Diagram">
+</p>
+
+### Core Components:
+*   **Multi-Model Analysis:**
+    1.  **Safety Model (YOLOv8n):** Detects `cracked_windshields`, `headlight_oxidation`, `tire_damage`.
+    2.  **Damage Model (YOLOv8n):** Identifies `scratches`, `dents`, `rust`.
+    3.  **Cleanliness Model (EfficientNet-B0):** Classifies the vehicle as `clean` or `dirty`.
+*   **Condition Score:** Aggregates model outputs into a single 0-100 score.
+*   **Severity Assessment:** Classifies cosmetic damage severity (Minor, Moderate, Severe) based on the detection's relative size.
+*   **User Interface:** A Streamlit application for report visualization.
+
+
 
 ### Core Components:
 *   **Multi-Model Analysis:**
